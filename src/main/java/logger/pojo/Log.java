@@ -13,7 +13,7 @@ public class Log implements Serializable {
     public Log(String data) {
         this.data = data;
     }
-    // todo -
+    // todo later - figure out how to get the thread id and name non functionally
 
     public String getData() {
         return data;
