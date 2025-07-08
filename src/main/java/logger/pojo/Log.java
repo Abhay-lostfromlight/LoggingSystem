@@ -1,5 +1,7 @@
 package logger.pojo;
 
+import logger.enums.Severity;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -9,6 +11,24 @@ public class Log implements Serializable {
     private Timestamp timestamp;
     private String threadId;
     private String threadName;
+    private Severity severity;
+    private String stackTrace;
+
+    public String getStackTrace() {
+        return stackTrace;
+    }
+
+    public void setStackTrace(String stackTrace) {
+        this.stackTrace = stackTrace;
+    }
+
+    public Severity getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(Severity severity) {
+        this.severity = severity;
+    }
 
     public Log(String data) {
         this.data = data;
