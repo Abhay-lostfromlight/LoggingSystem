@@ -14,6 +14,19 @@ public class Log implements Serializable {
     private Severity severity;
     private String stackTrace;
 
+    public Log(Severity severity, String data) {
+        this.severity = severity;
+        this.data = data;
+    }
+
+    public Log(String data, Timestamp timestamp, String stackTrace) {
+        this.data = data;
+        this.timestamp = timestamp;
+        this.stackTrace = stackTrace;
+        // Todo: Figure out how to get thread information when user is adding/appending any log and add stackTrace
+    }
+    //todo
+
     public String getStackTrace() {
         return stackTrace;
     }
@@ -29,11 +42,6 @@ public class Log implements Serializable {
     public void setSeverity(Severity severity) {
         this.severity = severity;
     }
-
-    public Log(String data) {
-        this.data = data;
-    }
-    // todo later - figure out how to get the thread id and name non functionally
 
     public String getData() {
         return data;
@@ -65,5 +73,9 @@ public class Log implements Serializable {
 
     public void setThreadName(String threadName) {
         this.threadName = threadName;
+    }
+
+    public Log getLog(Log log){
+        return new Log(log.getStackTrace(), log.getTimestamp(), log.getData());
     }
 }

@@ -1,0 +1,59 @@
+Build FileStore.java:
+
+Implement the Datastore interface
+
+Use Java object serialization
+
+Write to a file (start with "test.log")
+
+Handle exceptions gracefully
+
+Include proper resource management
+
+Key Learning: File I/O, serialization, and error handling
+
+Phase 4: Utility Components (Build Fourth)
+7. Create Deep Copy Utility
+Build DeepCopyUtil.java:
+
+Implement object cloning using serialization
+
+Handle the cloning of log collections
+
+Include proper exception handling
+
+Key Learning: Object cloning, serialization streams, and thread safety concepts
+
+Phase 5: Core Logging Engine (Build Fifth)
+8. Implement the Logger Class
+This is the most complex component - build it incrementally:
+
+Step 8a: Basic Structure
+Create singleton pattern implementation
+
+Add basic data structures (Set for tracking, Queue for processing)
+
+Implement thread-safe getInstance() method
+
+Step 8b: Simple Log Addition
+Create addLog() method with basic functionality
+
+Add timestamp and thread information automatically
+
+Use synchronized blocks for thread safety
+
+Step 8c: Batch Processing
+Implement appendLog() method
+
+Move logs from tracking set to processing queue
+
+Add deep copying for thread safety
+
+Step 8d: Asynchronous Processing
+Add ExecutorService with fixed thread pool
+
+Implement async log writing
+
+Handle queue management and cleanup
+
+Key Learning: Singleton pattern, thread safety, asynchronous programming, and concurrent collections
