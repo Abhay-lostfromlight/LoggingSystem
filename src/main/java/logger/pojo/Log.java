@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 public class Log implements Serializable {
-
+    //all the functionality of a log
     private String data;
     private Timestamp timestamp;
     private String threadId;
@@ -14,11 +14,13 @@ public class Log implements Serializable {
     private Severity severity;
     private String stackTrace;
 
+    //Constructs a Log object with the specified severity and data.
     public Log(Severity severity, String data) {
         this.severity = severity;
         this.data = data;
     }
 
+    //overloading same Log method for  a Log object with the specified data, timestamp, and stack trace.
     public Log(String data, Timestamp timestamp, String stackTrace) {
         this.data = data;
         this.timestamp = timestamp;
@@ -75,7 +77,13 @@ public class Log implements Serializable {
         this.threadName = threadName;
     }
 
-    public Log getLog(Log log){
+    /**
+     * Creates a new Log object based on the provided log.
+     *
+     * @param log The log to copy.
+     * @return A new Log object with the same attributes as the provided log.
+     */
+    public Log getLog(Log log) {
         return new Log(log.getStackTrace(), log.getTimestamp(), log.getData());
     }
 }
