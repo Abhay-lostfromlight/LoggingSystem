@@ -5,7 +5,7 @@ import java.io.*;
 public class DeepCopyUtil {
 
     public static <T> T deepCopy(T orignal) throws IOException, ClassNotFoundException {
-        //serializing-  write object  into a byte array
+        //serializing-  writing object into a byte array
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(orignal);
