@@ -2,9 +2,11 @@ package logger.service;
 
 import logger.data.Datastore;
 import logger.data.Filestore;
+import logger.enums.Severity;
 import logger.pojo.Log;
 import logger.utils.DeepCopyUtil;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -34,6 +36,9 @@ public class Logger {
 
     private Queue<Set<Log>> logProcessingQueue = new ArrayDeque<>();
 
+    private static final String Log_File = "test.log";
+    private static final String Backup_File = "test.log.backup";
+
     private Integer timeout;
 
     private static Logger logger = null;    //longer stance initialized to null
@@ -51,6 +56,9 @@ public class Logger {
         return logger;
     }
 
+    //add Timestamp based on local time and timezone
+    //get stacktrace of currentthread
+    //build string
     public void addLog(Log log) {
         log.setTimestamp(new Timestamp(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)));
 
@@ -62,6 +70,10 @@ public class Logger {
         for (int i = elementsToSkip; i < stackTrace.length; i++) {
             sb.append("\tat").append(stackTrace[i].toString()).append("\n");
         }
+
+        log.setThreadId(Long.toString(Thread.currentThread().getId()));
+        log.setThreadName(Thread.currentThread().getName());
+        log.setSeverity(log.getSeverity() == null ? Severity.LOW : log.getSeverity());
 
         String formattedStackTrace = sb.toString();
         log.setStackTrace(formattedStackTrace);
@@ -85,7 +97,7 @@ public class Logger {
                     System.out.println("Log append success");
                 }
             }catch (Exception e){
-                deleteLogs();
+                deleteLog();
             }
         });
     }
@@ -104,7 +116,36 @@ public class Logger {
         logStore.clear();
     }
 
-    private void deleteLogs() {
+    private void deleteLog() {
+        File file = new File(Log_File);
+        if (!file.exists()) {
+            System.out.println("no log file found for deletion");
+            return;
+        }
+
+        try{
+            backupLogFile(file);
+            fileStore.deleteLog();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         //todo access and delete log files
+    }
+
+    // Backup the log file to the backup file location
+    private void backupLogFile(File file) throws Exception {
+        File backup = new File(Backup_File);
+        try (java.io.FileInputStream fis = new java.io.FileInputStream(file);
+             java.io.FileOutputStream fos = new java.io.FileOutputStream(backup)) {
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) > 0) {
+                fos.write(buffer, 0, length);
+            }
+            System.out.println("Log file backed up successfully.");
+        } catch (Exception e) {
+            System.err.println("Failed to backup log file: " + e.getMessage());
+            throw e;
+        }
     }
 }
