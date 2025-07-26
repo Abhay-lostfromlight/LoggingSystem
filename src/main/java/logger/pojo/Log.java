@@ -6,6 +6,9 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 public class Log implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     //all the functionality of a log
     private String data;
     private Timestamp timestamp;
@@ -88,6 +91,6 @@ public class Log implements Serializable {
      * @return A new Log object with the same attributes as the provided log.
      */
     public Log getLog(Log log) {
-        return new Log(log.getStackTrace(), log.getTimestamp(), log.getData());
+        return new Log(log.getData(), log.getTimestamp(), log.getStackTrace());
     }
 }

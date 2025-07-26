@@ -9,9 +9,9 @@ import logger.service.Logger;
 public class App {
     public static void main(String[] args) {
             Logger logger = Logger.getInstance();
-            logger.addLog(new Log("start logger"));
-            logger.addLog(new Log("enter into file"));
-            logger.addLog(new Log("got exception"));
+            logger.addLog(new Log("start "));
+            logger.addLog(new Log("enter "));
+            logger.addLog(new Log("got "));
             logger.addLog(new Log("end logger"));
 
             logger.appendLog();

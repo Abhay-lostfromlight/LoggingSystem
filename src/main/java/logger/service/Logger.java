@@ -8,8 +8,6 @@ import logger.utils.DeepCopyUtil;
 
 import java.io.File;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -60,7 +58,7 @@ public class Logger {
     //get stacktrace of currentthread
     //build string
     public void addLog(Log log) {
-        log.setTimestamp(new Timestamp(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)));
+        log.setTimestamp(new Timestamp(System.currentTimeMillis()));
 
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         StringBuilder sb = new StringBuilder();
@@ -78,28 +76,27 @@ public class Logger {
         String formattedStackTrace = sb.toString();
         log.setStackTrace(formattedStackTrace);
 
-        logTrackSet.add(log);
+        //logTrackSet.add(log);
         put(logTrackSet, log);  //defined later further ahead
-
     }
 
     public void appendLog() {
         synchronized (Logger.class) {
             put(logProcessingQueue, logTrackSet);
             flushLogProcessingQueue(logTrackSet);
-        }
 
-        service.submit(() -> {
-            try{
-                synchronized (Logger.class) {
-                    fileStore.appendLog(logProcessingQueue.peek());
-                    logProcessingQueue.remove();
-                    System.out.println("Log append success");
+            service.submit(() -> {
+                try {
+                    synchronized (Logger.class) {
+                        fileStore.appendLog(logProcessingQueue.peek());
+                        logProcessingQueue.remove();
+                        System.out.println("Log append success");
+                    }
+                } catch (Exception e) {
+                    deleteLog();
                 }
-            }catch (Exception e){
-                deleteLog();
-            }
-        });
+            });
+        }
     }
 
     private <T> void put(Collection<T> logStore, T log) {

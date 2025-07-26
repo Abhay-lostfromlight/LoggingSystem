@@ -1,6 +1,6 @@
 package logger.enums;
 
-public enum Severity {
+public enum Severity   {
 
     HIGH("high"),
     WARN("warn"),
